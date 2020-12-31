@@ -130,12 +130,12 @@ var RoyISO8583 = function(){
         128	: ['b', 16, 0]
     };
 	
-	this.fields = [];
-	this.values = [];
-	this.getMaxField = 0;	
-	this.segment1 = [0,0];
-	this.segment2 = [0,0];
-	this.segment3 = [0,0];
+    this.fields = [];
+    this.values = [];
+    this.getMaxField = 0;	
+    this.segment1 = [0,0];
+    this.segment2 = [0,0];
+    this.segment3 = [0,0];
     this.type = "0000";
 
     this._onlyUnique = function(value, index, self) 
