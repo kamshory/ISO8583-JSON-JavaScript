@@ -810,3 +810,37 @@ var RoyISO8583 = function(){
 	};  
     var $this = this;
 }
+
+var TLV = function()
+{
+    this.parse = function(data)
+    {
+        var tl = 2;
+        var sl = 2;
+        var remaining = data;
+        var result = {};
+        while(remaining.length > tl)
+        {
+            var tag = remaining.substr(0, tl);
+            remaining = remaining.substr(2);
+            var len = remaining.substr(0, sl);
+            remaining = remaining.substr(2);
+            var length = parseInt(len);
+            var value = remaining.substr(0, length);
+            remaining = remaining.substr(length);
+            result[tag] = value;
+        }
+        return result;
+    }
+    this.build = function(data)
+    {
+        var result = '';
+        for(var tag in data)
+        {
+            var len = data[tag].length;
+            var length = (len<10)?('0'+len):len;
+            result += tag+length+data[tag];
+        }
+        return result;
+    }
+}

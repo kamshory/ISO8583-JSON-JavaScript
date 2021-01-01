@@ -18,8 +18,15 @@ table thead td{
     padding: 10px;
     box-sizing: border-box;
 }
+.iso-message-container{
+    padding-bottom: 10px;
+}
+.iso-data-container{
+    display: none;
+}
 textarea{
     width: 100%;
     box-sizing: border-box;
     padding: 10px;
+    resize: vertical;
 }

@@ -11,40 +11,95 @@
     <script>
         window.onload = function()
         {
-            
         }
-        function parseISOMessage()
+        Object.size = function(obj) {
+        var size = 0, key;
+        for (key in obj) {
+            if (obj.hasOwnProperty(key)) size++;
+        }
+        return size;
+    };
+        function parseISOMessage(targetElement)
         {
+            var tlvField = [48, 57];
+            var closestElement = targetElement.closest('.iso-container');
+
             var iso = new RoyISO8583();
-            var message = document.querySelector('textarea.iso').value;
+            var message = closestElement.querySelector('textarea.iso').value;
             iso.parse(message);
-            var values = iso.getData();
-            var tbody = document.querySelector('.iso-container .iso-data-container table tbody');
+            var tbody = closestElement.querySelector('.iso-data-container table tbody');
             
             var notNull = false;
-            do
+            
+            closestElement.querySelector('.iso-data-container').innerHTML = renderISOData(iso);
+            closestElement.querySelector('.tlv-data-container').innerHTML = '';
+            for(var i in tlvField)
             {
-                var element = document.querySelector('.iso-container .iso-data-container table tbody tr');
-                notNull = element != null;
-                if(notNull)
+                if(typeof iso.getData(i) != 'undefined')
                 {
-                    element.parentNode.removeChild(element)
+                    
+                    var tlv = new TLV();
+                    var json = tlv.parse(iso.getData(tlvField[i]));
+                    if(Object.size(json) > 0)
+                    {
+                        var tlvData = document.createElement('div');
+                        tlvData.classList.add('tlv-data');
+                        tlvData.innerHTML = renderTLVData(tlvField[i], json);
+                        closestElement.querySelector('.tlv-data-container').appendChild(tlvData);
+                    }
                 }
             }
-            while(notNull);
 
+            closestElement.querySelector('.iso-data-container').style.display='block';
+        }
+        function renderISOData(iso)
+        {
+            var values = iso.getData();
             values[0] = iso.getType();
+            var tbody = '';
             for(i in values)
             {
-                var tr = document.createElement('tr');
-                var td1 = document.createElement('td');
-                var td2 = document.createElement('td');
-                td1.innerText = i;
-                td2.innerText = values[i];
-                tr.appendChild(td1);
-                tr.appendChild(td2);
-                tbody.appendChild(tr);
+                tbody += '      <tr>\r\n'+
+                    '           <td>'+i+'</td>\r\n'+
+                    '           <td>'+values[i]+'</td>\r\n'+
+                    '       </tr>\r\n';
             }
+            var html = '<table width="100%" border="1">\r\n'+
+            '    <thead>\r\n'+
+            '        <tr>\r\n'+
+            '            <td width="40">Field</td>\r\n'+
+            '            <td>Value</td>\r\n'+
+            '        </tr>\r\n'+
+            '    </thead>\r\n'+
+            '    <tbody>\r\n'+
+            tbody+    
+            '    </tbody>\r\n'+           
+            '</table>\r\n';
+            return html;
+        }
+        function renderTLVData(de, values)
+        {
+            var tbody = '';
+            for(i in values)
+            {
+                tbody += '      <tr>\r\n'+
+                    '           <td>'+i+'</td>\r\n'+
+                    '           <td>'+values[i]+'</td>\r\n'+
+                    '       </tr>\r\n';
+            }
+            var html = '<h3>Data Element '+de+'</h3>\r\n'+
+            '<table width="100%" border="1">\r\n'+
+            '    <thead>\r\n'+
+            '        <tr>\r\n'+
+            '            <td width="40">Tag</td>\r\n'+
+            '            <td>Value</td>\r\n'+
+            '        </tr>\r\n'+
+            '    </thead>\r\n'+
+            '    <tbody>\r\n'+
+            tbody+    
+            '    </tbody>\r\n'+           
+            '</table>\r\n';
+            return html;
         }
 
     </script>
@@ -52,29 +107,18 @@
     <div class="iso-container">
         <div class="iso-message-container">
 
-        <form action="">
             <div class="form-control-wrapper">
-                <textarea name="iso" id="iso" class="iso" class="textarea" rows="3">0200B23A400108818000000000001000010A370000000000000000112707241600000414241311281128601204alto000000000248KOI             034PI06054501CN12522030064594AC042500360071234567123eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJBTFRPIiwiZXhwIjoxNjA2NzIyMTI5fQ.tyJ5WjfiuuG3AH5ugaXlNNXPlZocDJnPpsnC7x-12_M00009071234567</textarea>
+                <textarea name="iso" id="iso" class="iso" rows="3">0210B23A40010A818080000000001000010A370000000000690000112707241600000414241311281128601204alto00000000024800KOI             082AC042500PI06054501CN12522030064594FR12000000000016FS06000016NM18Customer 2 Bulan 4360287S025INFORMASI TAGIHAN LISTRIKS100S221BILLER : PLN POSTPAIDS326IDPEL       : 522030064594S432NAMA        : Customer 2 Bulan 4S525BL/TH       : SEP20,OKT20S622TOTAL TGHN  :  2 BULANS732RP TAG PLN  : RP         690.000S832ADMIN BANK  : RP           2.500S932TOTAL BAYAR : RP         692.50007123456700009071234567</textarea>
             </div>
             <div class="form-control-wrapper">
-                <input type="button" value="Parse" id="parse" onclick="parseISOMessage()">
+                <input type="button" value="Parse" id="parse" onclick="parseISOMessage(this)">
             </div>
-            
-        </form>
-
-            
         </div>
         <div class="iso-data-container">
-            <table width="100%" border="1" style="border-collapse: collapse;">
-                <thead>
-                    <tr>
-                        <td width="40">Field</td>
-                        <td>Value</td>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>           
-            </table>
+            
+        </div>
+        <div class="tlv-data-container">
+
         </div>
             
     </div>
