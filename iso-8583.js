@@ -183,7 +183,8 @@ var RoyISO8583 = function(){
         return arrInput;
     };
 
-    this._keySort = function(obj){
+    this._keySort = function(obj)
+    {
         var keys = Object.keys(obj).sort();
         var sortedObj = {}; 
         for(var i in keys) 
@@ -193,7 +194,8 @@ var RoyISO8583 = function(){
         return sortedObj;
     };
 
-    this._hexDec = function(hexString){
+    this._hexDec = function(hexString)
+    {
         return parseInt(hexString, 16);
     };
 
@@ -238,7 +240,8 @@ var RoyISO8583 = function(){
         return parseInt(number + '', fromBase | 0).toString(toBase | 0);
     };
 
-    this._sprintf = function(){
+    this._sprintf = function()
+    {
         //  discuss at: https://locutus.io/php/sprintf/
         // original by: Ash Searle (https://hexmen.com/blog/)
         // improved by: Michael White (https://getsprink.com)
@@ -439,10 +442,6 @@ var RoyISO8583 = function(){
         }
     };
 
-    this.getBit = function(bit)
-    {
-        return $this.getData(bit);
-    };
     this.setValue = function(bit, value)
     {
         if($this.fields.indexOf(bit) == -1)
@@ -481,29 +480,6 @@ var RoyISO8583 = function(){
 		$this._keySort($this.values);
     };
 
-	this.addBit = function(bit, value)
-	{
-        if($this.fields.indexOf(bit) == -1)
-        {
-            $this.fields.push(bit);
-        }
-        if(typeof value != 'undefined')
-		{
-            $this.setValue(bit, value);
-        }		
-	};
-    
-
-	this.addValue = function(bit, value)
-	{
-		$this.addBit(bit, value);
-	}
-	
-    this.addData = function(bit, value)
-	{
-		$this.addBit(bit, value);
-	}
-
 	this.getBitmap = function()
 	{
         var tmp	= $this._sprintf("%064d", 0).split('');    
@@ -538,7 +514,7 @@ var RoyISO8583 = function(){
         $this._bitmap	= (main+result).toUpperCase();
         
         return $this._bitmap;
-	}
+	};
 	
 	this.parse = function(message)
 	{
@@ -690,7 +666,7 @@ var RoyISO8583 = function(){
 				data = message.substr(0, field_length);
 				message = message.substr(field_length);
 			}
-			$this.addValue(field, data);
+			$this.setData(field, data);
 		}
 	}
     
@@ -778,6 +754,32 @@ var RoyISO8583 = function(){
 		return body;
 	};
 
+    this.addBit = function(bit, value)
+	{
+        if($this.fields.indexOf(bit) == -1)
+        {
+            $this.fields.push(bit);
+        }
+        if(typeof value != 'undefined')
+		{
+            $this.setValue(bit, value);
+        }		
+	};
+    
+    this.getBit = function(bit)
+    {
+        return $this.getData(bit);
+    };
+
+	this.setData = function(bit, value)
+	{
+		$this.addBit(bit, value);
+	}
+	
+    this.addData = function(bit, value)
+	{
+		$this.addBit(bit, value);
+	}
 
 	this.getData = function(bit)
 	{

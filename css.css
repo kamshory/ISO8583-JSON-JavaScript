@@ -1,0 +1,14 @@
+body{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.iso-container{
+    padding: 10px;
+    box-sizing: border-box;
+}
+textarea{
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px;
+}

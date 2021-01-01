@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RoyISO8583</title>
     <script src="iso-8583.js"></script>
+    <link rel="stylesheet" href="css.css">
 </head>
 <body>
     <script>
@@ -40,5 +41,39 @@
         }
 
     </script>
+
+    <div class="iso-container">
+        <div class="iso-message-container">
+
+        <form action="">
+            <div class="form-control-wrapper">
+                <textarea name="iso" id="iso" class="textarea" rows="3"></textarea>
+            </div>
+            <div class="form-control-wrapper">
+                <input type="button" value="Parse" id="parse">
+            </div>
+            
+        </form>
+
+            
+        </div>
+        <div class="iso-data-container">
+            <table width="100%" border="1" style="border-collapse: collapse;">
+                <thead>
+                    <tr>
+                        <td width="40">Field</td>
+                        <td>Value</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>3</td>
+                        <td>370000</td>
+                    </tr>
+                </tbody>           
+            </table>
+        </div>
+            
+    </div>
 </body>
 </html>
