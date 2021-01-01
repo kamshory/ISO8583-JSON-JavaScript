@@ -11,33 +11,40 @@
     <script>
         window.onload = function()
         {
-            var ori = '0200B23A400108818000000000001000010A370000000000000000112707241600000414241311281128601204alto000000000248KOI             034PI06054501CN12522030064594AC042500360071234567123eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJBTFRPIiwiZXhwIjoxNjA2NzIyMTI5fQ.tyJ5WjfiuuG3AH5ugaXlNNXPlZocDJnPpsnC7x-12_M00009071234567';
-            var a = new RoyISO8583();
-            a.parse(ori);
-            var b = new RoyISO8583();
-            var values = a.listValue();
-            b.setType(a.getType());
-            for(var i in values)
+            
+        }
+        function parseISOMessage()
+        {
+            var iso = new RoyISO8583();
+            var message = document.querySelector('textarea.iso').value;
+            iso.parse(message);
+            var values = iso.getData();
+            var tbody = document.querySelector('.iso-container .iso-data-container table tbody');
+            
+            var notNull = false;
+            do
             {
-                b.addBit(values[i].key, values[i].value)
+                var element = document.querySelector('.iso-container .iso-data-container table tbody tr');
+                notNull = element != null;
+                if(notNull)
+                {
+                    element.parentNode.removeChild(element)
+                }
             }
-            var copy = b.getISO();
+            while(notNull);
 
-            console.log(a.getBitmap())
-            console.log(b.getBitmap())
-            console.log(a.getBody())
-            console.log(b.getBody())
-
-            console.log(ori)
-            console.log(copy)
-            console.log(a.listValue())
-            console.log(b.listValue())
-            if(ori == copy)
+            values[0] = iso.getType();
+            for(i in values)
             {
-                console.log('Equal');
+                var tr = document.createElement('tr');
+                var td1 = document.createElement('td');
+                var td2 = document.createElement('td');
+                td1.innerText = i;
+                td2.innerText = values[i];
+                tr.appendChild(td1);
+                tr.appendChild(td2);
+                tbody.appendChild(tr);
             }
-            console.log(a.getData());
-            console.log(a.getData(3));
         }
 
     </script>
@@ -47,10 +54,10 @@
 
         <form action="">
             <div class="form-control-wrapper">
-                <textarea name="iso" id="iso" class="textarea" rows="3">0200B23A400108818000000000001000010A370000000000000000112707241600000414241311281128601204alto000000000248KOI             034PI06054501CN12522030064594AC042500360071234567123eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJBTFRPIiwiZXhwIjoxNjA2NzIyMTI5fQ.tyJ5WjfiuuG3AH5ugaXlNNXPlZocDJnPpsnC7x-12_M00009071234567</textarea>
+                <textarea name="iso" id="iso" class="iso" class="textarea" rows="3">0200B23A400108818000000000001000010A370000000000000000112707241600000414241311281128601204alto000000000248KOI             034PI06054501CN12522030064594AC042500360071234567123eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJBTFRPIiwiZXhwIjoxNjA2NzIyMTI5fQ.tyJ5WjfiuuG3AH5ugaXlNNXPlZocDJnPpsnC7x-12_M00009071234567</textarea>
             </div>
             <div class="form-control-wrapper">
-                <input type="button" value="Parse" id="parse">
+                <input type="button" value="Parse" id="parse" onclick="parseISOMessage()">
             </div>
             
         </form>
@@ -66,10 +73,6 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>3</td>
-                        <td>370000</td>
-                    </tr>
                 </tbody>           
             </table>
         </div>

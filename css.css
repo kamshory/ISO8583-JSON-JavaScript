@@ -3,6 +3,12 @@ body{
     padding: 0;
     box-sizing: border-box;
 }
+table td{
+    padding: 4px 5px;
+}
+table thead td{
+    font-weight: bold;
+}
 .iso-container{
     padding: 10px;
     box-sizing: border-box;
