@@ -3,8 +3,13 @@ body{
     padding: 0;
     box-sizing: border-box;
 }
+table{
+    table-layout: fixed;
+}
 table td{
     padding: 4px 5px;
+    vertical-align: text-top;
+    word-wrap:break-word;
 }
 table thead td{
     font-weight: bold;
