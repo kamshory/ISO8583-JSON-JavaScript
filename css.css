@@ -5,9 +5,10 @@ body{
 }
 table{
     table-layout: fixed;
+    border-collapse: collapse;
 }
 table td{
-    padding: 4px 5px;
+    padding: 4px 8px;
     vertical-align: text-top;
     word-wrap:break-word;
 }
@@ -29,4 +30,7 @@ textarea{
     box-sizing: border-box;
     padding: 10px;
     resize: vertical;
+}
+input[type="button"], input[type="submit"], input[type="reset"], button{
+    padding: 4px 14px;
 }
