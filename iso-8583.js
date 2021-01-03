@@ -684,7 +684,7 @@ var RoyISO8583 = function(){
 
 	this.getField = function()
 	{
-		var header = "";	
+		var header = "";
         header += $this.type;
 		var maxField = $this.getMaxField();
 		var seg1 = $this._sprintf("%08x%08x", $this.segment1[0], $this.segment1[1]);
