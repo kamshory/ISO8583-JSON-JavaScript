@@ -15,15 +15,17 @@ table td{
 table thead td{
     font-weight: bold;
 }
-.iso-container{
+.all{
     padding: 10px;
     box-sizing: border-box;
+}
+.iso-container{
 }
 .iso-message-container{
     padding-bottom: 10px;
 }
-.iso-data-container{
-    display: none;
+.form-control-wrapper{
+    padding: 4px 0;
 }
 textarea{
     width: 100%;
@@ -33,4 +35,17 @@ textarea{
 }
 input[type="button"], input[type="submit"], input[type="reset"], button{
     padding: 4px 14px;
+}
+.iso-data-container td input[type="text"], .iso-data-container td input[type="number"], .iso-data-container td textarea{
+    width: 100%;
+    box-sizing: border-box;
+    border: none;
+    background-color: transparent;
+    padding-left: 0;
+    padding-right: 0;
+}
+.field-remover-all a, .field-remover a{
+    text-decoration: none;
+    display: block;
+    color: #333333;
 }

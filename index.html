@@ -101,22 +101,113 @@
             '</table>\r\n';
             return html;
         }
+    function addField(targetElement)
+    {
+        var html = '<tr>\r\n'+
+            '    <td><span class="field-remover"><a href="#" onclick="return removeElement(this)">&times;</a></span></td>\r\n'+
+            '    <td><input type="text" class="field" value="" required="required" onchange="observeField(this)"></td>\r\n'+
+            '    <td><input type="text" class="value" value=""></td>\r\n'+
+            '</tr>\r\n';
+        var closestElement = targetElement.closest('.iso-container');
 
+        var tbody = closestElement.querySelector('.iso-data-container table tbody');
+        tbody.insertAdjacentHTML('beforeend', html);
+    }
+    function removeElement(targetElement)
+    {
+        var closestElement = targetElement.closest('tr');
+        closestElement.parentNode.removeChild(closestElement);
+    }
+    function observeField(targetElement)
+    {
+        var closestElement = targetElement.closest('.iso-container');
+        var fields = closestElement.getElementsByClassName('field');
+        var fieldList = [];
+        for(var i = 0; i < fields.length; i++)
+        {
+            var val = fields[i].value;
+            if(fieldList.indexOf(val) == -1)
+            {
+                fieldList.push(val);
+            }
+            else
+            {
+                console.log('Duplicated field '+val);
+                fields[i].value = '';
+                fields[i].select();
+                break;
+            }
+        }
+    }
+    function buildISO(targetElement)
+    {
+        var iso = new RoyISO8583();
+        var closestElement = targetElement.closest('.iso-container');
+        var fields = closestElement.getElementsByClassName('field');
+        var fieldList = [];
+        for(var i = 0; i < fields.length; i++)
+        {
+            var field = parseInt(fields[i].value);
+            var value = fields[i].closest('tr').getElementsByClassName('value')[0].value;
+            if(field == 0)
+            {
+                iso.setType(value);
+            }
+            else
+            {
+                iso.addData(field, value);
+            }
+        }
+        closestElement.querySelector('textarea.iso').value = iso.getISO();
+    }
     </script>
+    <div class="all">
+        <h2>ISO TLV Parser</h2>
+        <div class="iso-container">
+            <div class="iso-message-container">
+                <div class="form-control-wrapper">
+                    <textarea name="iso" class="iso" rows="3">0210B23A40010A818080000000001000010A370000000000690000112707241600000414241311281128601204alto00000000024800KOI             082AC042500PI06054501CN12522030064594FR12000000000016FS06000016NM18Customer 2 Bulan 4360287S025INFORMASI TAGIHAN LISTRIKS100S221BILLER : PLN POSTPAIDS326IDPEL       : 522030064594S432NAMA        : Customer 2 Bulan 4S525BL/TH       : SEP20,OKT20S622TOTAL TGHN  :  2 BULANS732RP TAG PLN  : RP         690.000S832ADMIN BANK  : RP           2.500S932TOTAL BAYAR : RP         692.50007123456700009071234567</textarea>
+                </div>
+                <div class="form-control-wrapper">
+                    <input type="button" value="Parse" id="parse" onclick="parseISOMessage(this)">
+                </div>
+            </div>
+            <div class="iso-data-container">           
+            </div>
+            <div class="tlv-data-container">
+            </div>          
+        </div>
 
-    <div class="iso-container">
-        <div class="iso-message-container">
-            <div class="form-control-wrapper">
-                <textarea name="iso" id="iso" class="iso" rows="3">0210B23A40010A818080000000001000010A370000000000690000112707241600000414241311281128601204alto00000000024800KOI             082AC042500PI06054501CN12522030064594FR12000000000016FS06000016NM18Customer 2 Bulan 4360287S025INFORMASI TAGIHAN LISTRIKS100S221BILLER : PLN POSTPAIDS326IDPEL       : 522030064594S432NAMA        : Customer 2 Bulan 4S525BL/TH       : SEP20,OKT20S622TOTAL TGHN  :  2 BULANS732RP TAG PLN  : RP         690.000S832ADMIN BANK  : RP           2.500S932TOTAL BAYAR : RP         692.50007123456700009071234567</textarea>
+        <h2>ISO Builder</h2>
+        <div class="iso-container">
+            <div class="iso-data-container">
+                <table width="100%" border="1">
+                    <thead>
+                        <tr>
+                            <td width="16"><span class="field-remover-all"><a href="#">&times;</a></span></td>
+                            <td width="40">Field</td>
+                            <td>Value</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="field-remover"><a href="#" onclick="return false">&times;</a></span></td>
+                            <td><input type="text" class="field" value="0" onchange="observeField(this)""></td>
+                            <td><input type="text" class="value" value="0200"></td>
+                        </tr>
+                    </tbody>
+                </table>                         
             </div>
             <div class="form-control-wrapper">
-                <input type="button" value="Parse" id="parse" onclick="parseISOMessage(this)">
+                <input type="button" value="Add Field" id="add-field" onclick="addField(this)">
+                <input type="button" value="Build ISO" id="build-iso" onclick="buildISO(this)">
+            </div>
+            <div class="iso-message-container">
+                <div class="form-control-wrapper">
+                    <textarea name="iso" class="iso" rows="3"></textarea>
+                </div>
             </div>
         </div>
-        <div class="iso-data-container">           
-        </div>
-        <div class="tlv-data-container">
-        </div>          
     </div>
 </body>
 </html>
